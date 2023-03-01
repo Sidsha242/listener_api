@@ -1,16 +1,12 @@
-/*
- * Starter Project for WhatsApp Echo Bot Tutorial
- *
- * Remix this as the starting point for following the WhatsApp Echo Bot tutorial
- *
- */
 
 "use strict";
-
+// https://band-coordinated-sawfish.glitch.me
 // Access token for your app
 // (copy token from DevX getting started page
 // and save it as environment variable into the .env file)
-const token = process.env.WHATSAPP_TOKEN;
+
+const PORT = 8080;
+
 
 // Imports dependencies and set up http server
 const request = require("request"),
@@ -19,11 +15,19 @@ const request = require("request"),
   axios = require("axios").default,
   app = express().use(body_parser.json()); // creates express http server
 
+
+const dotenv = require("dotenv")
+dotenv.config()
+
+
+
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log("webhook is listening"));
 
 // Accepts POST requests at /webhook endpoint
 app.post("/webhook", (req, res) => {
+
+  console.log("Inside post");
   // Parse the request body from the POST
   let body = req.body;
 
@@ -49,7 +53,7 @@ app.post("/webhook", (req, res) => {
           "https://graph.facebook.com/v12.0/" +
           phone_number_id +
           "/messages?access_token=" +
-          token,
+          process.env.WHATSAPP_TOKEN,
         data: {
           messaging_product: "whatsapp",
           to: from,
@@ -73,6 +77,7 @@ app.get("/webhook", (req, res) => {
    *This will be the Verify Token value when you set up webhook
   **/
   const verify_token = process.env.VERIFY_TOKEN;
+  console.log("Inside get");
 
   // Parse params from the webhook verification request
   let mode = req.query["hub.mode"];
